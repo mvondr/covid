@@ -4,39 +4,49 @@
 namespace App\Services;
 
 
+use DateInterval;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Nette\Utils\DateTime;
 
 class DataManager
 {
-    const DATA_FILENAME_TEMPLATE = "data/vaccination_%DATE%.json";
+    const DATA_FILENAME_MASK = "data/vaccination_*.json";
+    const FILESIZE_TRESHHOLD = 4200000;
 
     /**
      * @return mixed
      * @throws Exception
      */
-    static public function getVaccination()
+    public function getVaccination()
     {
-        $filename = str_replace(
-            '%DATE%',
-            DateTime::from('now')->format('Y-m-d'),
-            self::DATA_FILENAME_TEMPLATE);
+        $date = (new DateTime)->from('now');
+        $datetimeTreshhold = (new DateTime)->from($date);
+        $datetimeTreshhold->setTime(8, 0);
+        if ($date < $datetimeTreshhold) {
+            $date->sub(new DateInterval('PT8H'));
+        }
+        $filename = self::createFileNameFromDate($date);
 
         if (file_exists($filename)) {
             $data = self::readDataFromFile($filename);
         } else {
             try {
-                // read from web service
-                $data = (new Covid19Mzcr())->getVaccinationByRegions();
-
-                // write it to file
+                $data = (new Covid19Api())->getVaccinationByRegions();
+                $jsonData = json_decode($data);
+                $filename = self::createFileNameFromDate($jsonData->modified);
                 if (!file_exists($filename)) {
                     self::createDirectoryIfNeeded($filename);
-                    self::writeDataToFile($filename, $data);
+                    $result = self::writeDataToFile($filename, $data);
+                    if ($result) {
+                        self::checkAndDeleteFilesExcept($filename);
+                    }
                 }
+
+                return $jsonData;
+
             } catch (GuzzleException | Exception $e) {
-                // if web service does not work, use the latest file
+                // if web service does not work, use the latest file as a last resort
                 $filename = self::getLatestFilename();
                 if (file_exists($filename)) {
                     $data = self::readDataFromFile($filename);
@@ -70,9 +80,9 @@ class DataManager
     private static function writeDataToFile(string $filename, string $data): bool
     {
         $fileHandler = fopen($filename, 'w');
-        fwrite($fileHandler, $data);
-
-        return fclose($fileHandler);
+        $writeResult = fwrite($fileHandler, $data);
+        $closeResult = fclose($fileHandler);
+        return $writeResult && $closeResult;
     }
 
     /**
@@ -94,10 +104,38 @@ class DataManager
      */
     private static function getLatestFilename(): string
     {
-        $filenameWithWildcard = str_replace('%DATE%', '*', self::DATA_FILENAME_TEMPLATE);
-        $files = glob($filenameWithWildcard);
+        $files = glob(self::DATA_FILENAME_MASK);
         rsort($files);
 
         return reset($files);
     }
+
+    /**
+     * @param string $date
+     * @return string
+     * @throws Exception
+     */
+    private static function createFileNameFromDate(string $date): string
+    {
+        return
+            str_replace(
+                '*',
+                DateTime::from($date)->format('Y-m-d'),
+                self::DATA_FILENAME_MASK);
+    }
+
+    private static function checkAndDeleteFilesExcept($filename): void
+    {
+        $files = glob(self::DATA_FILENAME_MASK);
+        rsort($files);
+        array_shift($files);   // prepare all for removing except the latest one
+
+        // remove others only if the given file is not suspiciously small
+        if (filesize($filename) > self::FILESIZE_TRESHHOLD) {
+            foreach ($files as $removing) {
+                unlink($removing);
+            }
+        }
+    }
+
 }

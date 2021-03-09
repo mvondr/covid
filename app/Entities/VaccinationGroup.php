@@ -22,17 +22,12 @@ class VaccinationGroup
      * Create list for date selector
      *
      * @param stdClass $bulkData data from Covid19Mzcr API
-     * @param DateTime $date fill data up to this date
      * @throws Exception
      */
-    public function init(stdClass $bulkData, DateTime $date)
+    public function init(stdClass $bulkData)
     {
         $this->data = [];
-        $bulkDate = DateTime::from($bulkData->modified);
-        if ($date->format('Y.m.d') == DateTime::from($bulkData->modified)->format('Y.m.d')) {
-            $date = $bulkDate;
-        }
-        $this->modified = $date;
+        $this->modified = DateTime::from($bulkData->modified);
         $this->source = $bulkData->source;
 
         foreach (array_reverse($bulkData->data) as $vaccination) {
@@ -40,9 +35,7 @@ class VaccinationGroup
             $month = DateTime::from($vaccination->datum)->format('m');
             $year = DateTime::from($vaccination->datum)->format('Y');
             $this->dateList[$year][$month][$day] = $day;
-            if (DateTime::from($vaccination->datum) <= $date) {
-                $this->data[] = $vaccination;
-            }
+            $this->data[] = $vaccination;
         }
     }
 

@@ -6,12 +6,11 @@ namespace App\Services;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use stdClass;
 
 /**
  * Vaccination API (by Ministry of Health)
  */
-class Covid19Mzcr
+class Covid19Api
 {
     /**
      * @var Client
