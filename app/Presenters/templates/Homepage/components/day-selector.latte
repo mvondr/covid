@@ -1,0 +1,40 @@
+<div class="btn-group-vertical">
+
+    <a class="btn btn-primary"
+       href="{link :default}" class="btn">
+        Nejnovější
+    </a>
+    {foreach ($dateList) as $year =>$y_item}
+        <a class="btn btn-primary border-white"
+           data-bs-toggle="collapse"
+           href="#collapseYear{$year}"
+           role="button"
+           aria-expanded="{=substr($date, 0, 4) == $year}"
+           aria-controls="collapseYear{$year}">
+            <b>{$year}</b>
+        </a>
+        <div id="collapseYear{$year}" class="collapse btn-group-vertical {=substr($date, 0, 4) == $year ? 'show' : ''}"
+             style="width:100%;">
+            {foreach ($dateList[$year]) as $month => $m_item}
+                <a class="btn btn-primary border-white"
+                   style="opacity:50%"
+                   data-bs-toggle="collapse"
+                   href="#collapseMonth{$year}{$month}"
+                   role="button"
+                   aria-expanded="{=substr($date, 5, 2) == $month}"
+                   aria-controls="collapseMonth{$year}{$month}">
+                    <i>{$month}</i>
+                </a>
+                <div id="collapseMonth{$year}{$month}"
+                     class="collapse btn-group-vertical {=substr($date, 5, 2) == $month ? 'show' : ''}"
+                     style="width:100%">
+                    <a n:foreach="($dateList[$year][$month]|sort|reverse) as $day => $d_item"
+                            class="btn text-nowrap {=$date == $day ? 'btn-primary' : 'btn-outline-primary'}"
+                            href="{link :default $day}">
+                        {$day|date:'j.n.Y'}
+                    </a>
+                </div>
+            {/foreach}
+        </div>
+    {/foreach}
+</div>

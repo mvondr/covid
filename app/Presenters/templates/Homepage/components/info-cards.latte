@@ -1,0 +1,27 @@
+<div class="col">
+    <div class="card border-info mb-3">
+        <div class="card-header"><b>Očkovaných</b></div>
+        <div class="card-body bg-info">
+            <h5 class="card-title">{$prvnich_davek|number:0, '', ' '}</h5>
+            <p class="card-text">lidí (alespoň jednou dávkou)</p>
+        </div>
+    </div>
+</div>
+<div class="col">
+    <div class="card border-success mb-3">
+        <div class="card-header"><b>Druhou dávkou</b></div>
+        <div class="card-body bg-success text-white">
+            <h5 class="card-title">{$druhych_davek|number:0, '', ' '}</h5>
+            <p class="card-text">lidí očkováno</p>
+        </div>
+    </div>
+</div>
+<div class="col align-content-center mb-3">
+    <div class="card border-warning">
+        <div class="card-header "><b>Aplikováno</b></div>
+        <div class="card-body bg-warning">
+            <h5 class="card-title">{$celkem_davek|number:0, '', ' '}</h5>
+            <p class="card-text">vakcín</p>
+        </div>
+    </div>
+</div>

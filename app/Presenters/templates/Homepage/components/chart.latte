@@ -1,0 +1,37 @@
+<div class="card border">
+    <div class="card-header"><b>Věkové kategorie</b>
+    </div>
+    <div class="card-body">
+        <div class="row border-bottom">
+            <div class="col-2 text-end"><small><b>Kategorie</b></small></div>
+            <div class="col-2 text-end"><small><b>Druhých dávek</b></small></div>
+            <div class="col-2 text-end"><small><b>% očkovaných obyvatel v&nbspkategorii</b></small></div>
+            <div class="col-4"></div>
+            <div class="col-2 text-end"><small><b>Zbývá proočkovat v&nbspkategorii</b></small></div>
+        </div>
+        <div n:foreach="$groupByAgeCategory as $item" class="row border-bottom">
+
+            <div class="col-2 text-end">{$item->vekova_skupina}:</div>
+            <div class="col-2 text-end">{$item->druhych_davek|number:0, '', ' '}</div>
+            {if !in_array($item->vekova_skupina, ['nezařazeno', '0-17'])}
+                {var $percentage2 = ($druhych_davek != 0) ? ($item->druhych_davek / $demography[$item->vekova_skupina] * 100) : 0}
+                {var $percentage1 = $item->prvnich_davek / $demography[$item->vekova_skupina] * 100}
+                <div class="col-2 text-end">{$percentage2|number:1} %</div>
+                <div class="col-4 bg-light d-flex p-0">
+                    <div class="text-nowrap bg-success flex-column" style="width:{$percentage2|noescape}%">&nbsp
+                    </div>
+                    <div class="text-nowrap bg-info flex-column"
+                         style="width:{($percentage1 - $percentage2)|noescape}%">&nbsp
+                    </div>
+                </div>
+                <div class="col-2 text-end">{=($demography[$item->vekova_skupina] - $item->druhych_davek)|number:0, '', ' '}</div>
+            {/if}
+        </div>
+        <div class="row text-secondary">
+            <div class="col"></div>
+            <div class="col-auto">
+                {include "sources.latte"}
+            </div>
+        </div>
+    </div>
+</div>

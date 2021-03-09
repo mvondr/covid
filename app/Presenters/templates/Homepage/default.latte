@@ -1,0 +1,15 @@
+{block content}
+<div class="container-xl" style="">
+    {include "components/jumbotron.latte"}
+    <div class="d-flex flex-row">
+        <div class="flex-column">
+            {include "components/day-selector.latte"}
+        </div>
+        <div class="container-xl">
+            <div class="row">
+                {include "components/info-cards.latte"}
+            </div>
+            {include "components/chart.latte"}
+        </div>
+    </div>
+</div>

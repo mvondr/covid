@@ -1,0 +1,6 @@
+{var $time = $modified->format('H:i:s')}
+{var $dateNoTime = $modified->format('j.n.Y')}
+<div>
+    <span n:if="$time != '00:00:00'">{$modified|date:'j.n.Y H:i'}</span>
+    <span n:if="$time == '00:00:00'">{$modified|date:'j.n.Y'}</span>
+</div>
