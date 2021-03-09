@@ -32,7 +32,7 @@ Grafické rozhraní je řešeno pomocí Bootstrap 5.
 
 Obrazovka
 ---------
-![screenshot](./www/images/image.jpg | width=500)
+![screenshot](./www/images/screenshot.png | width=500)
 
 Autor
 -----
