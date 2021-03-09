@@ -32,7 +32,7 @@ Grafické rozhraní je řešeno pomocí Bootstrap 5.
 
 Obrazovka
 ---------
-![screenshot](https://github.com/mvondr/covid/blob/master/www/images/screenshot.png | width=500)
+<img src="https://github.com/mvondr/covid/blob/master/www/images/screenshot.png?raw=true" alt="screenshot" width="500px">
 
 Autor
 -----
