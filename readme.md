@@ -34,6 +34,10 @@ Obrazovka
 ---------
 <img src="https://github.com/mvondr/covid/blob/master/www/images/screenshot.png?raw=true" alt="screenshot" width="500px">
 
+Kde běží tento web?
+-------------------
+https://covid.slimnet.cz
+
 Autor
 -----
 Martin Vondráček <mvondr@gmail.com>
