@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 namespace App\Presenters;
 
@@ -25,8 +25,10 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
 
     public function renderDefault($inputDate)
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $bulkData = $this->dataManager->getVaccination();
         $vaccinationGroup = new VaccinationGroup();
+        /** @noinspection PhpUnhandledExceptionInspection */
         $vaccinationGroup->init($bulkData);
 
         if ($inputDate) {
@@ -39,6 +41,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
             $date = $vaccinationGroup->modified;
         }
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $sumAll = $vaccinationGroup->sumAll($date);
         $this->template->modified = $sumAll->modified;
         $this->template->source = $sumAll->source;
@@ -46,6 +49,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $this->template->druhych_davek = $sumAll->data[0]->druhych_davek;
         $this->template->celkem_davek = $sumAll->data[0]->prvnich_davek + $sumAll->data[0]->druhych_davek;
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $groupByAgeCategory = $vaccinationGroup->groupByAgeCategory($date);
         $this->template->groupByAgeCategory = $groupByAgeCategory->data;
         $this->template->dateList = $vaccinationGroup->getDateList();

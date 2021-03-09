@@ -17,11 +17,11 @@ class VaccinationGroup
     public $dateList = [];
 
     /**
-     * Fill in object with data from Covid19Mzcr API
+     * Fill in object with data from Covid19 API
      * up to given date
      * Create list for date selector
      *
-     * @param stdClass $bulkData data from Covid19Mzcr API
+     * @param stdClass $bulkData data from Covid19 API
      * @throws Exception
      */
     public function init(stdClass $bulkData)
