@@ -28,6 +28,9 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          pwd
-          echo $GITHUB_WORKSPACE
           composer install
+          echo 'pwd'
+          pwd
+          echo GITHUB_WORKSPACE
+          echo $GITHUB_WORKSPACE
+          ls -alps
