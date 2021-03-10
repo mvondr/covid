@@ -1,11 +1,12 @@
 <div class="btn-group-vertical">
 
-    <a class="btn btn-primary"
+    <a class="btn {=$inputDate ? 'btn-outline-primary' : 'btn-primary'}"
        href="{link :default}">
         Nejnovější
     </a>
     {foreach ($dateList) as $year =>$y_item}
         <a class="btn btn-primary border-white"
+           style="opacity:50%"
            data-bs-toggle="collapse"
            href="#collapseYear{$year}"
            role="button"
@@ -17,7 +18,7 @@
              style="width:100%;">
             {foreach ($dateList[$year]) as $month => $m_item}
                 <a class="btn btn-primary border-white"
-                   style="opacity:50%"
+                   style="opacity:70%"
                    data-bs-toggle="collapse"
                    href="#collapseMonth{$year}{$month}"
                    role="button"

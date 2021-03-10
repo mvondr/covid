@@ -23,7 +23,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $this->dataManager = $dataManager;
     }
 
-    public function renderDefault($inputDate)
+    public function renderDefault($date)
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $bulkData = $this->dataManager->getVaccination();
@@ -31,18 +31,18 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         /** @noinspection PhpUnhandledExceptionInspection */
         $vaccinationGroup->init($bulkData);
 
-        if ($inputDate) {
+        if ($date) {
             try {
-                $date = DateTime::from($inputDate);
+                $dateObj = DateTime::from($date);
             } catch (Exception $e) {
-                $date = $vaccinationGroup->modified;
+                $dateObj = $vaccinationGroup->modified;
             }
         } else {
-            $date = $vaccinationGroup->modified;
+            $dateObj = $vaccinationGroup->modified;
         }
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $sumAll = $vaccinationGroup->sumAll($date);
+        $sumAll = $vaccinationGroup->sumAll($dateObj);
         $this->template->modified = $sumAll->modified;
         $this->template->source = $sumAll->source;
         $this->template->prvnich_davek = $sumAll->data[0]->prvnich_davek;
@@ -50,10 +50,11 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $this->template->celkem_davek = $sumAll->data[0]->prvnich_davek + $sumAll->data[0]->druhych_davek;
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $groupByAgeCategory = $vaccinationGroup->groupByAgeCategory($date);
+        $groupByAgeCategory = $vaccinationGroup->groupByAgeCategory($dateObj);
         $this->template->groupByAgeCategory = $groupByAgeCategory->data;
         $this->template->dateList = $vaccinationGroup->getDateList();
-        $this->template->selectedDate = $date->format('Y-m-d');
+        $this->template->selectedDate = $dateObj->format('Y-m-d');
+        $this->template->inputDate = $date;
         $this->template->allPeople = Demography::countPeopleExceptOf(Demography::CATEGORY_0_17)
             - $sumAll->data[0]->druhych_davek
             + $groupByAgeCategory->data[VaccinationGroup::CATEGORY_0_17]->druhych_davek;
